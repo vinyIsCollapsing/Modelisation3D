@@ -1,6 +1,7 @@
 clc;
 clear;
 
+% Teste de push/pull
 % Paramètres initiaux
 alpha = [0.0, -pi/2, 0.0, -pi/2, pi/2, -pi/2];
 d = [0.0, 0.0, 265.69, 30.0, 0.0, 0.0];
