@@ -11,7 +11,7 @@ function plotRobot(q, varargin)
     parse(p, varargin{:});
     opt = p.Results;
 
-    [~, T_all] = MGD(q);
+    [~, T_all] = forwardKinematics(q);
     P = squeeze(T_all(1:3, 4, :));        
     P = [ [0;0;0], P ];                   
 

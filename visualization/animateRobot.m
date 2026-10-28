@@ -8,6 +8,11 @@ function animateRobot(q_start, q_end, filename, num_frames)
         num_frames = 40;
     end
 
+    [folder, ~, ~] = fileparts(filename);
+    if ~isempty(folder) && ~exist(folder, 'dir')
+        mkdir(folder);
+    end
+
     q_start = q_start(:);
     q_end   = q_end(:);
 
@@ -26,10 +31,10 @@ function animateRobot(q_start, q_end, filename, num_frames)
         q_cur = (1 - t_smooth) * q_start + t_smooth * q_end;
 
         cla(ax);
-        plot_robot(q_cur, 'Axes', ax, 'Limits', lims);
+        plotRobot(q_cur, 'Axes', ax, 'Limits', lims);
         drawnow;
 
-        frame_name = sprintf('frame_%03d.png', k);
+        frame_name = sprintf('docs/frame_%03d.png', k);
         print(fig, frame_name, '-dpng', '-r100');
 
         img = imread(frame_name);
