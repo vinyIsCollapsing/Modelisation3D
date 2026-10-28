@@ -1,5 +1,5 @@
-function plot_robot(q, varargin)
-%   PLOT_ROBOT  Desenha o KUKA LBR4+ (7 eixos) em 3D para uma pose q.
+function plotRobot(q, varargin)
+%   plotRobot  Plots the KUKA LBR4+ (7 axes) in 3D for a pose q.
 
     p = inputParser;
     addParameter(p, 'Axes',     []);
@@ -27,7 +27,7 @@ function plot_robot(q, varargin)
     axis(ax, 'equal');
     view(ax, 3);
     xlabel(ax, 'X'); ylabel(ax, 'Y'); zlabel(ax, 'Z');
-    title(ax, 'KUKA LBR4+ — cinemática direta (DH, 7 eixos)');
+    title(ax, 'KUKA LBR4+ — direct kinematics (DH, 7 axes)');
 
     plot3(ax, P(1,:), P(2,:), P(3,:), '-', 'Color', opt.Color, 'LineWidth', 3);
     plot3(ax, P(1,2:end), P(2,2:end), P(3,2:end), opt.Marker, 'Color', opt.Color, ...
@@ -50,7 +50,7 @@ function plot_robot(q, varargin)
     else
         span = max(P, [], 2) - min(P, [], 2);
         center = mean(P, 2);
-        half = max(max(span) * 0.7, 300);  
+        half = max(max(span) * 0.7, 300);
         axis(ax, [center(1)-half, center(1)+half, center(2)-half, center(2)+half, center(3)-half, center(3)+half]);
     end
 

@@ -1,20 +1,20 @@
-function [T07, T_all] = MGD(q)
-%   MGD  Modelo Geometrico Direto do KUKA LBR4+ (7 eixos).
-%   Convenção DH: modificada (Craig).
-%   a = angulo de torcao (alpha de Craig)
-%   d = comprimento do elo em X (a de Craig)
-%   r = offset ao longo de Z (d de Craig)
+function [T07, T_all] = forwardKinematics(q)
+%   forwardKinematics: Direct Geometric Model of the KUKA LBR4+ (7 axes)
+%   DH convention: modified (Craig)
+%   a = torque angle (Craig alpha)
+%   d = link length in the X-direction (Craig a)
+%   r = offset along the Z-axis (Craig’s d)
 
-    % ---------- Parametros DH fixos (LBR4+) ----------
+    % ---------- Fixed DH parameters (LBR4+) ----------
     a = [0, -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2];
     d = [0, 0, 0, 0, 0, 0, 0];
     r = [310.4, 0, 400.1, 0, 390.0, 0, 78.0];
 
-    % ---------- Offsets das juntas ----------
+    % ---------- Joint offsets ----------
     varQ = zeros(7,1);
     q = q(:) + varQ;
 
-    % ---------- Acumulacao ----------
+    % ---------- Accumulation ----------
     T07   = eye(4);
     T_all = zeros(4, 4, 7);
 

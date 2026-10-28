@@ -1,5 +1,5 @@
-function J = MatriceJacobienne(q, p0)
-%   MATRICEJACOBIENNE  Jacobiano geometrico do KUKA LBR4+ (7 eixos).
+function J = jacobian(q, p0)
+%   jacobian  Geometric Jacobian of the KUKA LBR4+ (7 axes).
 
     a = [0, -pi/2, pi/2, -pi/2, pi/2, -pi/2, pi/2];
     d = [0, 0, 0, 0, 0, 0, 0];

@@ -1,5 +1,5 @@
-function q = ComCinematicInverse(T_target, q0, max_iter, tol)
-%   COMCINEMAICINVVERSE  Cinematica inversa numerica do LBR4+ (7 eixos).
+function q = inverseKinematics(T_target, q0, max_iter, tol)
+%   inverseKinematics  Numerical inverse kinematics for the LBR4+ (7 axes).
 
     if nargin < 3, max_iter = 100; end
     if nargin < 4, tol = 1e-3; end
@@ -14,17 +14,17 @@ function q = ComCinematicInverse(T_target, q0, max_iter, tol)
         e = p_target - p_cur;
 
         if norm(e) < tol
-            fprintf('Convergiu em %d iterações (erro = %.2e)\n', iter, norm(e));
+            fprintf('Converged in %d iterations (error = %.2e)\n', iter, norm(e));
             return;
         end
 
         J = MatriceJacobienne(q, p_cur);
-        
-        % Pseudoinversa para matriz 6x7
-        dq = pinv(J) * [e; 0; 0; 0]; 
-        
-        q = q + 0.5 * dq; % Passo com amortecimento
+
+        % Pseudoinverse for a 6x7 matrix
+        dq = pinv(J) * [e; 0; 0; 0];
+
+        q = q + 0.5 * dq; % Step with damping
     end
 
-    warning('IK não convergiu em %d iterações (erro = %.2e)', max_iter, norm(e));
+    warning('IK did not converge in %d iterations (error = %.2e)', max_iter, norm(e));
 end
