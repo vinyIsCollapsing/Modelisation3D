@@ -31,15 +31,15 @@ Modelisation3D/
 ├── README.md
 ├── .gitignore
 ├── kinematics/                 # Mathematical core
-│   ├── forward_kinematics.m
+│   ├── forwardKinematics.m
 │   ├── jacobian.m
-│   ├── inverse_kinematics.m
-│   └── center_of_mass.m
+│   ├── inverseKinematics.m
+│   └── centerOfMass.m
 ├── visualization/              # 3D rendering
-│   ├── plot_robot.m
-│   └── animate_robot.m
+│   ├── plotRobot.m
+│   └── animateRobot.m
 ├── validation/                 # CoppeliaSim integration
-│   └── validate_coppelia.m
+│   └── validateCoppelia.m
 ├── zmqRemoteApi/               # CoppeliaSim ZeroMQ Remote API (Git submodule)
 └── docs/                       # Documentation and media assets
     └── lbr4_demo.gif
