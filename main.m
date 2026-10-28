@@ -1,5 +1,6 @@
 addpath('kinematics');
 addpath('visualization');
+addpath('validation');
 
 clc; clear;
 
