@@ -1,0 +1,6 @@
+.vscode/
+
+octave-workspace
+*.mat
+*.png
+!docs/*.png
