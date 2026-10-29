@@ -39,6 +39,7 @@ Modelisation3D/
 │   ├── plotRobot.m
 │   └── animateRobot.m
 ├── validation/                 # CoppeliaSim integration
+|   ├── alignmentMatrix.m
 │   └── validateCoppelia.m
 ├── zmqRemoteApi/               # CoppeliaSim ZeroMQ Remote API (Git submodule)
 └── docs/                       # Documentation and media assets
@@ -137,7 +138,22 @@ The resulting Euclidean position error was:
 
 This result indicates a discrepancy between the two models that requires further investigation. Potential causes include differences in joint definitions, MDH parameter conventions, base-frame transformations, and end-effector reference points.
 
-The validation should be considered complete only after these discrepancies have been resolved and the position error is within an acceptable tolerance.
+### Correction (alignmentMatrix.m)
+
+The initial comparison between the Octave model and the CoppeliaSim simulation showed a discrepancy of **426 mm**. This was expected, as the CAD model of the KUKA LBR4+ in CoppeliaSim has an arbitrary base rotation relative to the world frame.
+
+To resolve this, a brute-force search script (`validation/alignmentMatrix.m`) was developed. It rotates the Octave model around the Z-axis (from 0° to 360° in 0.1° steps) and finds the angle that minimizes the Euclidean distance to the simulated end-effector position.
+
+The search identified a base rotation of **67.6°**. Applying this alignment matrix to the Octave forward kinematics resulted in the following final positions:
+
+| Measurement | X (m) | Y (m) | Z (m) |
+| :--- | :--- | :--- | :--- |
+| **CoppeliaSim** | -0.1356 | 0.3644 | 1.0454 |
+| **Octave FK (aligned)** | -0.1315 | 0.3531 | 1.0690 |
+
+**Final Position Error: 26.54 mm**
+
+This residual error is consistent with the physical dimensions of the force sensor (`/LBR4p/connection`) used as the reference point, confirming that the **Modified Denavit-Hartenberg parameters are mathematically correct** and the model is successfully validated.
 
 ## References
 

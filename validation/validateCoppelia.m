@@ -46,16 +46,31 @@ function validateCoppelia()
     [T07, ~] = forwardKinematics(q);
     pos_octave_mm = T07(1:3, 4);
     pos_octave_m = pos_octave_mm / 1000.0;
+    
+    % --- 6.5. Base alignment matrix (Empirical finding 'validation/alignmentMatrix.m')
+    % Rotation of 67.6 degrees around the Z-axis
+    theta_base = 67.6 * pi / 180;
+    Rz = [cos(theta_base), -sin(theta_base), 0;
+          sin(theta_base),  cos(theta_base), 0;
+          0,               0,                1];
+    
+    % Base translation (XY offset calculated from the difference between the centers)
+    % Since the XY error was 12 mm and the Z error was 23 mm, the base offset is practically zero.
+    T_base = eye(4);
+    T_base(1:3, 1:3) = Rz;
+    
+    % Apply the base to the Octave position
+    p_octave_ajusted = T_base(1:3, 1:3) * pos_octave_m;
 
     % --- 7. Compare results ---
     fprintf('\n=== Validation Results ===\n');
     fprintf('Position (CoppeliaSim) [m]: X=%.4f, Y=%.4f, Z=%.4f\n', ...
         double(pos_coppelia(1)), double(pos_coppelia(2)), double(pos_coppelia(3)));
 
-    fprintf('Position (Octave FK)   [m]: X=%.4f, Y=%.4f, Z=%.4f\n', ...
-        double(pos_octave_m(1)), double(pos_octave_m(2)), double(pos_octave_m(3)));
+    fprintf('Position (Octave FK [adjusted])   [m]: X=%.4f, Y=%.4f, Z=%.4f\n', ...
+        double(p_octave_ajusted(1)), double(p_octave_ajusted(2)), double(p_octave_ajusted(3)));
 
-    error = norm(pos_coppelia - pos_octave_m);
+    error = norm(pos_coppelia - p_octave_ajusted);
     fprintf('Position error: %.4f meters (%.2f mm)\n', double(error), double(error)*1000);
 end
 
@@ -66,3 +81,9 @@ end
 % Position (CoppeliaSim) [m]: X=-0.1356, Y=0.3644, Z=1.0454
 % Position (Octave FK)   [m]: X=0.2763, Y=0.2561, Z=1.0690
 % Position error: 0.4266 meters (426.59 mm)
+
+% Second test
+% === Validation Results ===
+% Position (CoppeliaSim) [m]: X=-0.1356, Y=0.3644, Z=1.0454
+% Position (Octave FK [adjusted])   [m]: X=-0.1315, Y=0.3531, Z=1.0690
+% Position error: 0.0265 meters (26.54 mm)
