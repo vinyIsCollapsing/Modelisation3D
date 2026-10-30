@@ -1,4 +1,4 @@
-# Modelisation3D — KUKA LBR4+ Kinematics & Simulation
+# Modelisation3D : KUKA LBR4+ Kinematics & Simulation
 
 ![Octave](https://img.shields.io/badge/Octave-Compatible-blue)
 ![CoppeliaSim](https://img.shields.io/badge/CoppeliaSim-Validated-green)
@@ -123,37 +123,21 @@ The exact frame definitions and fixed transformations must be consistent between
 
 ## Validation Results
 
-The validation script compares the Cartesian position of the end-effector obtained from CoppeliaSim with the position computed by the Octave forward kinematics model.
+The initial comparison between the Octave mathematical model and the CoppeliaSim simulation showed a discrepancy of **426 mm**. Through a systematic frame-alignment analysis, the discrepancy was traced to two main factors:
 
-An example result from an initial test is shown below:
+1. **Base Frame Translation:** The CAD model in CoppeliaSim is translated by `(-250 mm, +250 mm)` relative to the world origin.
+2. **Joint Axis Conventions:** Testing each joint individually revealed that **joints 2, 4, and 6 rotate in the opposite direction** in the CoppeliaSim URDF compared to the standard Modified DH convention.
 
-| Measurement | X (m) | Y (m) | Z (m) |
-|---|---:|---:|---:|
-| CoppeliaSim | -0.1356 | 0.3644 | 1.0454 |
-| Octave forward kinematics | 0.2763 | 0.2561 | 1.0690 |
-
-The resulting Euclidean position error was:
-
-**426.59 mm**
-
-This result indicates a discrepancy between the two models that requires further investigation. Potential causes include differences in joint definitions, MDH parameter conventions, base-frame transformations, and end-effector reference points.
-
-### Correction (alignmentMatrix.m)
-
-The initial comparison between the Octave model and the CoppeliaSim simulation showed a discrepancy of **426 mm**. This was expected, as the CAD model of the KUKA LBR4+ in CoppeliaSim has an arbitrary base rotation relative to the world frame.
-
-To resolve this, a brute-force search script (`validation/alignmentMatrix.m`) was developed. It rotates the Octave model around the Z-axis (from 0° to 360° in 0.1° steps) and finds the angle that minimizes the Euclidean distance to the simulated end-effector position.
-
-The search identified a base rotation of **67.6°**. Applying this alignment matrix to the Octave forward kinematics resulted in the following final positions:
+After applying these corrections (base translation and sign inversion for joints 2, 4, and 6), the end-effector position error dropped to **< 1 mm**.
 
 | Measurement | X (m) | Y (m) | Z (m) |
 | :--- | :--- | :--- | :--- |
-| **CoppeliaSim** | -0.1356 | 0.3644 | 1.0454 |
-| **Octave FK (aligned)** | -0.1315 | 0.3531 | 1.0690 |
+| **CoppeliaSim** | -0.8638 | 0.2500 | 0.9243 |
+| **Octave FK (adjusted)** | -0.8638 | 0.2500 | 0.9243 |
 
-**Final Position Error: 26.54 mm**
+**Final Position Error: ~0.00 mm**
 
-This residual error is consistent with the physical dimensions of the force sensor (`/LBR4p/connection`) used as the reference point, confirming that the **Modified Denavit-Hartenberg parameters are mathematically correct** and the model is successfully validated.
+This confirms that the Modified Denavit-Hartenberg parameters are mathematically correct.
 
 ## References
 

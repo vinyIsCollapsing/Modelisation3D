@@ -8,6 +8,7 @@ function plotRobot(q, varargin)
     addParameter(p, 'ShowBase', true);
     addParameter(p, 'ShowEE',   true);
     addParameter(p, 'Limits',   []);
+    addParameter(p, 'View',     3);
     parse(p, varargin{:});
     opt = p.Results;
 
@@ -25,7 +26,7 @@ function plotRobot(q, varargin)
     hold(ax, 'on');
     grid(ax, 'on');
     axis(ax, 'equal');
-    view(ax, 3);
+    view(ax, opt.View);
     xlabel(ax, 'X'); ylabel(ax, 'Y'); zlabel(ax, 'Z');
     title(ax, 'KUKA LBR4+ — direct kinematics (DH, 7 axes)');
 

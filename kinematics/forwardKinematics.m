@@ -13,6 +13,11 @@ function [T07, T_all] = forwardKinematics(q)
     % ---------- Joint offsets ----------
     varQ = zeros(7,1);
     q = q(:) + varQ;
+    
+    % Joints 2, 4, and 6 on the CoppeliaSim rotate in the opposite direction from our DH model.
+    q(2) = -q(2);
+    q(4) = -q(4);
+    q(6) = -q(6);
 
     % ---------- Accumulation ----------
     T07   = eye(4);
