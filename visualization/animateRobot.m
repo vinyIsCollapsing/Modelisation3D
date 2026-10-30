@@ -16,11 +16,12 @@ function animateRobot(q_start, q_end, filename, num_frames)
     q_start = q_start(:);
     q_end   = q_end(:);
 
-    fig = figure('Visible', 'off', 'Position', [100 100 800 600]);
-    ax = axes('Parent', fig);
+    fig = figure('Visible', 'off', 'Position', [100 100 1200 500]);
+    
+    ax_3d  = subplot(1, 2, 1, 'Parent', fig);
+    ax_top = subplot(1, 2, 2, 'Parent', fig);
 
     lims = [-800 800 -800 800 0 1200];
-    axis(ax, lims);
 
     fprintf('Generating %d frames...\n', num_frames);
 
@@ -30,8 +31,16 @@ function animateRobot(q_start, q_end, filename, num_frames)
 
         q_cur = (1 - t_smooth) * q_start + t_smooth * q_end;
 
-        cla(ax);
-        plotRobot(q_cur, 'Axes', ax, 'Limits', lims);
+        cla(ax_3d);
+        cla(ax_top);
+        
+        % --- Screen 1: 3D View ---
+        plotRobot(q_cur, 'Axes', ax_3d, 'Limits', lims, 'View', 3);
+        title(ax_3d, '3D Perspective');
+        
+        % --- Screen 2: Top View ---
+        plotRobot(q_cur, 'Axes', ax_top, 'Limits', lims, 'View', 2);
+        title(ax_top, 'Top View (XY Plane)');
         drawnow;
 
         frame_name = sprintf('docs/frame_%03d.png', k);

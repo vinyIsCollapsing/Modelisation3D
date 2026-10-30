@@ -1,10 +1,10 @@
 addpath('kinematics');
 
 % Data
-q = [pi/4, pi/6, -pi/4, 0, pi/3, -pi/4, 0];
+q = [0, 0, 0, 0, 0, 0, 0];
 [T07, ~] = forwardKinematics(q);
 p_octave = T07(1:3, 4) / 1000; 
-p_coppelia = [-0.1356; 0.3644; 1.0454];
+p_coppelia = [-0.2500; 0.2500; 1.1785];
 
 best_error = inf;
 best_angle = 0;
