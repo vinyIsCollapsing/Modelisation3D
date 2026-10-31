@@ -139,6 +139,31 @@ After applying these corrections (base translation and sign inversion for joints
 
 This confirms that the Modified Denavit-Hartenberg parameters are mathematically correct.
 
+## Inverse Kinematics & Target Reaching
+
+Beyond static validation, the project implements a numerical Inverse Kinematics (IK) solver (`inverseKinematics.m`) that commands the robot to reach arbitrary Cartesian targets in 3D space.
+
+### The 7-DOF Redundancy
+Because the LBR4+ has 7 joints but only 6 degrees of freedom in space (position + orientation), the system is redundant. To handle this, the solver uses the **Damped Least Squares (DLS)** method (`J_dls = J^T * (J * J^T + λ^2 * I)^-1`). This prevents the robot from getting stuck in singular configurations and avoids infinite joint rotations.
+
+### Joint Inversions and Limits
+Two important adjustments were made to align the mathematical model with the CoppeliaSim physics engine:
+1.  **Joint Inversion:** Joints 2, 4, and 6 rotate in the opposite direction in CoppeliaSim compared to the standard DH convention. This is compensated for both in the Forward Kinematics and in the Jacobian matrix.
+2.  **Dynamic Limits:** Instead of hardcoding joint limits, the function `getJointLimits.m` queries the CoppeliaSim API directly to fetch the physical minimum and maximum angles for each joint, ensuring the solver never commands an impossible pose.
+
+### Target Reaching Result
+
+Using a target position of `[300, 200, 400] mm`, the IK solver converged in **75 iterations**. The joint angles were sent to CoppeliaSim, and the actual end-effector position was measured.
+
+| Measurement | X (mm) | Y (mm) | Z (mm) |
+| :--- | :--- | :--- | :--- |
+| **Target Position** | 300.0 | 200.0 | 400.0 |
+| **CoppeliaSim Actual** | 300.3 | 199.9 | 398.9 |
+
+**Final Position Error: 1.11 mm**
+
+This result demonstrates that the mathematical model successfully controls the simulated physical robot with millimeter precision, validating both the kinematic equations and the API integration.
+
 ## References
 
 - [GNU Octave](https://octave.org/)

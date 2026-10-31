@@ -4,5 +4,3 @@ octave-workspace
 *.mat
 *.png
 !docs/*.png
-
-validation/reachTarget.m
