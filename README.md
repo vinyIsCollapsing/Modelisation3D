@@ -164,6 +164,14 @@ Using a target position of `[300, 200, 400] mm`, the IK solver converged in **75
 
 This result demonstrates that the mathematical model successfully controls the simulated physical robot with millimeter precision, validating both the kinematic equations and the API integration.
 
+## Trajectory Control
+
+The inverse kinematics solver is continuous and stable, allowing the robot to draw geometric shapes in 3D space. The script `validation/drawTrajectory.m` generates a circular trajectory and commands the robot to follow it in real-time.
+
+![Circle Trajectory](docs/circle_trajectory.gif)
+
+*The robot drawing a 150 mm radius circle at 600 mm height.*
+
 ## References
 
 - [GNU Octave](https://octave.org/)
