@@ -1,7 +1,7 @@
+addpath('kinematics');
+addpath('zmqRemoteApi/clients/octave');
+
 function reachTarget()
-    addpath('kinematics');
-    addpath('zmqRemoteApi/clients/octave');
-    
     % --- 1. Connect to CoppeliaSim ---
     client = RemoteAPIClient();
     sim = client.require('sim');

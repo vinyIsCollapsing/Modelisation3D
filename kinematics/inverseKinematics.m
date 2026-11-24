@@ -29,7 +29,10 @@ function [q, success] = inverseKinematics(target_pos, q0, q_min, q_max, max_iter
         end
 
         % 4. Compute Geometric Jacobian
-        J = jacobian(q, p_cur);
+        % The FK flips the sign of joints 2, 4 and 6 internally, so the
+        % Jacobian must be evaluated at the same (flipped) configuration.
+        q_sign = [1; -1; 1; -1; 1; -1; 1];
+        J = jacobian(q .* q_sign, p_cur);
         
         J(:, 2) = -J(:, 2);
         J(:, 4) = -J(:, 4);
