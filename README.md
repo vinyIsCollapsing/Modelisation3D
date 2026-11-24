@@ -16,12 +16,12 @@ This project covers forward kinematics, the geometric Jacobian, numerical invers
 
 ## Features
 
-- **Forward Kinematics (`forward_kinematics.m`):** Computes the end-effector pose as a 4 × 4 homogeneous transformation matrix using the Modified Denavit–Hartenberg (Craig) convention.
+- **Forward Kinematics (`forwardKinematics.m`):** Computes the end-effector pose as a 4 × 4 homogeneous transformation matrix using the Modified Denavit–Hartenberg (Craig) convention.
 - **Geometric Jacobian (`jacobian.m`):** Computes the 6 × 7 Jacobian matrix relating joint velocities to the end-effector's linear and angular velocities.
-- **Inverse Kinematics (`inverse_kinematics.m`):** Implements a numerical inverse kinematics solver based on the Jacobian pseudoinverse to handle the manipulator's 7-DOF redundancy.
-- **Center of Mass (`center_of_mass.m`):** Calculates the global center of mass using link masses and local center-of-mass coordinates.
-- **3D Visualization (`plot_robot.m` and `animate_robot.m`):** Provides custom 3D plotting and smooth GIF generation, fully compatible with GNU Octave without requiring additional toolboxes.
-- **CoppeliaSim Validation (`validate_coppelia.m`):** Connects to CoppeliaSim through the ZeroMQ Remote API to compare the simulated end-effector position with the result obtained from the Octave forward kinematics model.
+- **Inverse Kinematics (`inverseKinematics.m`):** Implements a numerical inverse kinematics solver based on the Jacobian pseudoinverse to handle the manipulator's 7-DOF redundancy.
+- **Center of Mass (`centerOfMass.m`):** Calculates the global center of mass using link masses and local center-of-mass coordinates.
+- **3D Visualization (`plotRobot.m` and `animateRobot.m`):** Provides custom 3D plotting and smooth GIF generation, fully compatible with GNU Octave without requiring additional toolboxes.
+- **CoppeliaSim Validation (`validateCoppelia.m`):** Connects to CoppeliaSim through the ZeroMQ Remote API to compare the simulated end-effector position with the result obtained from the Octave forward kinematics model.
 
 ## Project Structure
 
@@ -35,15 +35,17 @@ Modelisation3D/
 │   ├── jacobian.m
 │   ├── inverseKinematics.m
 │   └── centerOfMass.m
+├── validation/                 # CoppeliaSim integration
+|   ├── alignmentMatrix.m
+|   ├── drawTrajectory.m
+|   ├── getJointLimits.m
+|   ├── reachTarget.m
+│   └── validateCoppelia.m
 ├── visualization/              # 3D rendering
 │   ├── plotRobot.m
 │   └── animateRobot.m
-├── validation/                 # CoppeliaSim integration
-|   ├── alignmentMatrix.m
-│   └── validateCoppelia.m
 ├── zmqRemoteApi/               # CoppeliaSim ZeroMQ Remote API (Git submodule)
 └── docs/                       # Documentation and media assets
-    └── lbr4_demo.gif
 ```
 
 ## How to Run
@@ -80,7 +82,7 @@ This runs the main simulation, displays the calculated end-effector pose, plots 
 
 ### 3. Validate the Model Against CoppeliaSim
 
-The project includes a validation script at `validation/validate_coppelia.m`. It connects to CoppeliaSim through the ZeroMQ Remote API, sends a set of joint angles, retrieves the simulated end-effector position, and compares it with the position calculated by the Octave forward kinematics model.
+The project includes a validation script at `validation/validateCoppelia.m`. It connects to CoppeliaSim through the ZeroMQ Remote API, sends a set of joint angles, retrieves the simulated end-effector position, and compares it with the position calculated by the Octave forward kinematics model.
 
 #### Step 1: Start CoppeliaSim
 
@@ -153,12 +155,12 @@ Two important adjustments were made to align the mathematical model with the Cop
 
 ### Target Reaching Result
 
-Using a target position of `[300, 200, 400] mm`, the IK solver converged in **75 iterations**. The joint angles were sent to CoppeliaSim, and the actual end-effector position was measured.
+Using a target position of `[300, 200, 600] mm`, the IK solver converged in **18 iterations**. The joint angles were sent to CoppeliaSim, and the actual end-effector position was measured.
 
 | Measurement | X (mm) | Y (mm) | Z (mm) |
 | :--- | :--- | :--- | :--- |
-| **Target Position** | 300.0 | 200.0 | 400.0 |
-| **CoppeliaSim Actual** | 300.3 | 199.9 | 398.9 |
+| **Target Position** | 300.0 | 200.0 | 600.0 |
+| **CoppeliaSim Actual** | 300.5 | 200.1 | 599.0 |
 
 **Final Position Error: 1.11 mm**
 
